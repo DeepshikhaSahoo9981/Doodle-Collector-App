@@ -1,0 +1,120 @@
+To build a production-ready `.apk` file for your Expo/React Native app, the modern, standard approach is to use **EAS Build** (Expo Application Services). It handles all the complex Android SDK and Gradle compiling in the cloud, meaning you don't have to configure heavy Android Studio software locally on your Mac.
+
+Here is the step-by-step workflow to generate your `.apk`:
+
+---
+
+### Step 1: Install EAS CLI
+
+First, open your terminal, navigate to your frontend directory (`frontend/doodle-diary`), and install the EAS command-line tool globally:
+
+```bash
+npm install -g eas-cli
+
+```
+
+---
+
+### Step 2: Log In to Your Expo Account
+
+You need an Expo account to use their cloud builder. If you don't have one, sign up at [expo.dev](https://expo.dev/). Then, log in via your terminal:
+
+```bash
+eas login
+
+```
+
+*(Enter your Expo username/email and password).*
+
+---
+
+### Step 3: Configure EAS Build
+
+Next, initialize the EAS configuration in your project. Run:
+
+```bash
+eas build:configure
+
+```
+
+When prompted, select **`android`** (or `all` if you want iOS configuration ready for later). This command automatically creates a file named **`eas.json`** in your root frontend folder.
+
+---
+
+### Step 4: Modify `eas.json` to Output an APK
+
+By default, Expo builds an `.aab` (Android App Bundle) file, which is what Google Play requires for store submissions. However, you cannot install an `.aab` directly on a test phone. **To get a shareable `.apk` file, we must tweak `eas.json`.**
+
+Open the newly created `eas.json` file and modify the `production` profile (or create a `preview` profile) to include `"buildType": "apk"`. It should look like this:
+
+```json
+{
+  "cli": {
+    "version": ">= 10.0.0"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "production": {
+      "android": {
+        "buildType": "apk"
+      }
+    }
+  }
+}
+
+```
+
+---
+
+### Step 5: Double-Check Your Android Configuration
+
+Before triggering the build, open your **`app.json`** file and make sure you have a unique `package` name defined under the `android` object. If it's missing, add it:
+
+```json
+{
+  "expo": {
+    "name": "Doodle Diary",
+    "slug": "doodle-diary",
+    "version": "1.0.0",
+    "android": {
+      "package": "com.deepshikha.doodlediary"
+    }
+  }
+}
+
+```
+
+---
+
+### Step 6: Run the Build Command!
+
+Now you are ready to kick off the cloud compilation. Run this command in your terminal:
+
+```bash
+eas build --platform android --profile production
+
+```
+
+* **What to expect:** EAS will ask if you want it to generate a new Android Keystore (the security signature for your app). Say **Yes** (`Generate new keystore`).
+* **The Cloud Process:** EAS will package your code, upload it to Expo's secure build servers, and put it in a queue.
+
+The terminal will provide a live tracking URL. You can close your terminal if you want—the build happens completely on Expo's servers.
+
+---
+
+### Step 7: Download and Install
+
+Once the build finished successfully (usually takes 5–10 minutes):
+
+1. The terminal (and your Expo dashboard web page) will display a **sharable download link** and a **QR Code**.
+2. Scan the QR code with your Android phone or click the link to download the `.apk` file directly.
+3. Open the downloaded file on your phone to install your live app!
