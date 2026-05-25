@@ -1,4 +1,5 @@
-const SERVER_URL_B = process.env.EXPO_PUBLIC_BACKEND_SERVER_URL;
+// const SERVER_URL_B = process.env.EXPO_PUBLIC_BACKEND_SERVER_URL;
+const SERVER_URL_B = "https://doodle-collector-app.onrender.com";
 
 const defaultJson = {
     "message": {
