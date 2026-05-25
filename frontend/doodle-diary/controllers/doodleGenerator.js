@@ -1,3 +1,5 @@
+const SERVER_URL_B = process.env.EXPO_PUBLIC_BACKEND_SERVER_URL;
+
 const defaultJson = {
     "message": {
         "doodle_topics": [
@@ -10,7 +12,7 @@ const defaultJson = {
 }
 export const generate = async () => {
     try {
-        let response = await fetch("http://localhost:5001/api/doodle/generate", {
+        let response = await fetch( `${SERVER_URL_B}/api/doodle/generate`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -34,7 +36,7 @@ export const generate = async () => {
 
 export const getAllImagesFromDrive = async()=>{
     try {
-        let response = await fetch("http://localhost:5001/api/doodle/readAllImage", {
+        let response = await fetch(`${SERVER_URL_B}/api/doodle/readAllImage`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -79,7 +81,7 @@ export const getAllImagesFromDrive = async()=>{
 
     try {
         // 4. Send the request to your backend URL
-        const response = await fetch('http://localhost:5001/api/doodle/uploadImage', {
+        const response = await fetch(`${SERVER_URL_B}/api/doodle/uploadImage`, {
             method: 'POST',
             body: formData,
             // headers:{
